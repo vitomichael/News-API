@@ -17,7 +17,3 @@
 
 ## Postman Documentation
 [Documentation](https://documenter.getpostman.com/view/14990560/TzJuAcyE)
-
-## Web Demo
-
-You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
