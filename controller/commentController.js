@@ -19,7 +19,7 @@ const deleteComment = async (req, res, next) => {
     if (comment.penulis != req.user.id && req.user.role != "admin") {
       return res.rest.badRequest("Anda tidak dapat menghapus komentar ini !");
     }
-    await db.Comment.destroy();
+    await comment.destroy();
     res.rest.success("Komentar berhasil di delete");
   } catch (error) {
     next(error);
