@@ -2,6 +2,7 @@
 const multer = require("multer");
 const path = require("path");
 const { unlinkAsync } = require("../helpers/deleteFile");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/thumbnail/");
@@ -14,6 +15,7 @@ const storage = multer.diskStorage({
     );
   },
 });
+
 const checkFileType = (file, cb) => {
   if (file.mimetype.includes("image")) {
     cb(null, true);
@@ -40,9 +42,11 @@ const upload = (req, res, next) => {
           await unlinkAsync(element.path); //ngapus file, element.path lokasi filenya
         });
       }
+
       if (err.code) {
         return res.rest.notAcceptable(err.code);
       }
+
       return res.rest.notAcceptable(err);
     } else {
       next();
@@ -50,4 +54,4 @@ const upload = (req, res, next) => {
   });
 };
 
-module.exports = upload
+module.exports = upload;

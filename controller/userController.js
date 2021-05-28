@@ -1,6 +1,7 @@
 const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
+
 const generateToken = (id, role) => {
   return jwt.sign({ id: id, role: role }, process.env.token_secret);
 };
@@ -11,6 +12,7 @@ const createUser = (req, res, next) => {
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;
+
     db.User.create(req.body)
       .then((result) => {
         res.rest.success(result);
@@ -22,8 +24,10 @@ const createUser = (req, res, next) => {
     next(error);
   }
 };
+
 const loginUser = (req, res, next) => {
   let { username, password } = req.body;
+
   db.User.findOne({
     where: {
       username: username,
@@ -45,15 +49,16 @@ const loginUser = (req, res, next) => {
 };
 
 const toggleRole = async (req, res, next) => {
-  // Ngubah role
   try {
     const data = await db.User.findOne({
       where: {
         id: req.params.id,
       },
     });
+
     if (data) {
       await data.update({ role: data.role == "admin" ? "user" : "admin" });
+
       res.rest.success("Role sudah terupdate");
     } else {
       res.rest.badRequest("Id tidak ditemukan");

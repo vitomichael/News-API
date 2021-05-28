@@ -1,4 +1,5 @@
 const db = require("../models");
+
 const { unlinkAsync } = require("../helpers/deleteFile");
 
 const getBerita = (req, res, next) => {
@@ -10,25 +11,31 @@ const getBerita = (req, res, next) => {
       next(error);
     });
 };
+
 const spesificNews = async (req, res, next) => {
   try {
     const dataBerita = await db.News.findOne({ where: { id: req.params.id } });
+
     if (!dataBerita)
       return res.rest.badRequest(
         `Berita dengan ID ${req.params.id} tidak ditemukan`
       );
+
     const dataComment = await db.Comment.findAll({
       where: { berita: req.params.id },
     });
+
     res.rest.success({ berita: dataBerita, comment: dataComment });
   } catch (error) {
     next(error);
   }
 };
+
 const createBerita = async (req, res, next) => {
   try {
     req.body.penulis = req.user.id;
     req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
+
     db.News.create(req.body)
       .then((result) => {
         res.rest.success(result);
@@ -41,6 +48,7 @@ const createBerita = async (req, res, next) => {
     res.rest.badRequest(error);
   }
 };
+
 const updateBerita = async (req, res, next) => {
   try {
     let berita = await db.News.findOne({
@@ -48,7 +56,9 @@ const updateBerita = async (req, res, next) => {
         id: req.params.id,
       },
     });
+
     if (!berita) return res.rest.badRequest("Id not found");
+
     berita
       .update(req.body)
       .then((result) => {
@@ -64,6 +74,7 @@ const updateBerita = async (req, res, next) => {
     next(error);
   }
 };
+
 const deleteBerita = async (req, res, next) => {
   try {
     let berita = await db.News.findOne({
@@ -71,11 +82,13 @@ const deleteBerita = async (req, res, next) => {
         id: req.params.id,
       },
     });
+
     if (!berita)
       return res.rest.badRequest("Data yang ingin di hapus tidak ditemukan");
 
     await unlinkAsync(`public/thumbnail/${berita.thumbnail}`);
     await berita.destroy();
+
     return res.rest.success("Delete Berhasil");
   } catch (error) {
     next(error);

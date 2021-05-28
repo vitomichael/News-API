@@ -18,6 +18,7 @@ const authenticateToken = (req, res, next) => {
 
 const permit = (...allow) => {
   const isAllowed = (status) => allow.indexOf(status) > -1;
+
   return (req, res, next) => {
     if (isAllowed(req.user.role)) {
       next();

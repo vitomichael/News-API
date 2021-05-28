@@ -37,10 +37,10 @@ app.use((err, req, res, next) => {
 });
 
 const dbOptions = {
-  // Buat ngubah db
-  // alter: true, //nambahin kolom baru
-  // force: true, //ngosongin database waktu ngapus / init
+  // alter: true,
+  // force: true,
 };
+
 const port = process.env.port || 3000;
 db.sequelize.sync(dbOptions).then(() => {
   app.listen(port, () => {
